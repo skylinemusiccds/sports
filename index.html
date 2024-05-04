@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    
+<meta charset="utf-8">
+
+<title>Shaka Player Example: Encrypted Content with ClearKey</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/shaka-player.compiled.js"></script>
+
+
+<style>
+
+      video {
+        
+        object-fit: cover; 
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+    
+    }
+
+.clients{
+  margin-top: 100vh;
+}
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div>
+
+      <video id="video" poster="https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/imageContent-8301-j7hc0820-v1/imageContent-8301-j7hc0820-m1.png" controls autoplay></video>
+
+    </div>
+
+    <script>
+
+      // Acquired kty k and kid
+
+      var keys = {
+
+        kty: "oct",
+
+        kid: "raHBbV22V/20JkOh9UsgFA",
+
+        k: "vUvnhcfc3dIooupRNekkGg"
+
+      };
+
+      // Initialize the player and set up the manifest
+
+      var manifestUri = 'https://tataplay.dinesh29.com.np/live/tataplay/star-sports-1-hd/manifest.mpd';
+
+      var video = document.getElementById('video');
+
+      var player = new shaka.Player(video);
+
+      player.configure({
+        
+        drm: {
+            
+            clearKeys: {
+                
+                [keys.kid]: keys.k
+            
+            },
+        
+        }
+    
+    });
+
+      // Listen for errors and log them.
+
+      player.addEventListener('error', function(event) {
+
+        console.error('Error code', event.detail.code, 'object', event.detail);
+
+      });
+
+      // Try to load a manifest.
+
+      player.load(manifestUri).then(function() {
+
+        console.log('The video has now been loaded!');
+
+      }).catch(onError);    
+
+      function onError(error) {
+
+        console.error('Error code', error.code, 'object', error);
+
+      }
+
+
+      const corsOptions = {
+        origin: "https://ominous-spoon-g4pwq9pg55h99xp-5500.app.github.dev",
+    };
+
+    </script>
+
+  </body>
+
+</html>
